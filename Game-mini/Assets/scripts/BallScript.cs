@@ -1,6 +1,7 @@
 using System.Drawing;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -101,6 +102,11 @@ public class BallScript : MonoBehaviour
             Debug.Log("Jump!");
         }
     }
+
+    private Vector3 GetCheckPoint() {
+        return new Vector3();
+    }
+    
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground")) // เช็คว่าลูกบอลแตะพื้น
@@ -108,16 +114,15 @@ public class BallScript : MonoBehaviour
            is_grounded = true;
            Debug.Log("Ground!");
         }
+        
+        // check if dead
+        if(collision.gameObject.CompareTag("CheckPoint")){
+            rb.position = GetCheckPoint();
+        }
+
     }
 
 
-    // check if dead
-    // private void Dead(){
-    //     if (life < 1 || is_dead){
-    //         is_dead = true;
-    //         overscene.SetActive(true);
-    //     }
-    // }
     // // เช็คการชนะ
     // private bool IsWin(){
     //     if (GetPoint() >= 20){
@@ -132,7 +137,7 @@ public class BallScript : MonoBehaviour
     //     Dead();
     // }
 
-    
+
     // public int GetPoint() {
     //     return point;
     // }
