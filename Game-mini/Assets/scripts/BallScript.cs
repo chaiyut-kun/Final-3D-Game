@@ -18,6 +18,7 @@ public class BallScript : MonoBehaviour
     public Transform Camera;
     public float jump_force = 100f; // กำหนดแรงกระโดด
     private bool is_grounded = true; // ตรวจสอบว่าลูกบอลอยู่บนพื้นหรือไม่
+    private Vector3 checkpoint;
 
 
     // sound asset
@@ -104,11 +105,18 @@ public class BallScript : MonoBehaviour
     }
 
     private Vector3 GetCheckPoint() {
-        return new Vector3();
+        return checkpoint;
+
+    }
+    private void SetCheckPoint(Vector3 position){
+        checkpoint = position;
     }
     
     void OnCollisionEnter(Collision collision)
     {
+        if(collision.gameObject.CompareTag("Lava")){
+            rb.position = GetCheckPoint();
+        }
         if (collision.gameObject.CompareTag("Ground")) // เช็คว่าลูกบอลแตะพื้น
         {
            is_grounded = true;
@@ -117,9 +125,12 @@ public class BallScript : MonoBehaviour
         
         // check if dead
         if(collision.gameObject.CompareTag("CheckPoint")){
-            rb.position = GetCheckPoint();
+            // Retrieve the position of the checkpoint object
+            Vector3 checkpointPosition = collision.gameObject.transform.position; // or use collision.transform.position
+            Debug.Log("Checkpoint position: " + checkpointPosition);
+            SetCheckPoint(checkpointPosition);
         }
-
+        
     }
 
 

@@ -9,6 +9,7 @@ TagManager:
   - coin
   - Ground
   - CheckPoint
+  - Lava
   layers:
   - Default
   - TransparentFX
