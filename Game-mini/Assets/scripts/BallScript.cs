@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BallScript : MonoBehaviour
 {
@@ -26,7 +27,9 @@ public class BallScript : MonoBehaviour
     // public AudioClip coin;
     // public AudioSource source;
 
-    private int point = 0;
+    private int coin = 0;
+    private int coinCount;
+    public Text coinText;
     // public TextMeshPro point_text;
     // public TextMeshPro life_text;
     // public GameObject overscene;
@@ -34,18 +37,20 @@ public class BallScript : MonoBehaviour
 
     // sound asset
 
-    
-    
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
         is_dead = false;
+        coinCount = GameObject.FindGameObjectsWithTag("coin").Length;
+        coinText.text = "Coin = " + coin.ToString() + "/" + coinCount.ToString();
         // life_text.text = life.ToString();
         // overscene.SetActive(false);
         // winnerscene.SetActive(false);
 
-        
+
     }
 
     // Update is called once per frame
@@ -65,12 +70,13 @@ public class BallScript : MonoBehaviour
         GetComponent<Rigidbody>().AddForce(Physics.gravity, ForceMode.Acceleration);
     }
 
-    private void Move(){
+    private void Move()
+    {
 
         // //  ---- move part ----
         float move_horizontal = Input.GetAxis("Horizontal");   //Horizontal แนวนอน
         float move_vertical = Input.GetAxis("Vertical");       // Vertical แนวตั้ง
-        
+
         // กำหนดความเร็วของการเคลื่อนที่
         Vector3 forward = Camera.forward;
         Vector3 right = Camera.right;
@@ -85,7 +91,7 @@ public class BallScript : MonoBehaviour
         {
             rb.AddForce(Vector3.left * move_force, ForceMode.Force);
         }
-	    // move right
+        // move right
         if (Input.GetKey(KeyCode.RightArrow))
         {
             rb.AddForce(Vector3.right * move_force, ForceMode.Force);
@@ -94,7 +100,8 @@ public class BallScript : MonoBehaviour
         Jump();
     }
 
-    void Jump(){
+    void Jump()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && is_grounded)
         {
             rb.AddForce(Vector3.up * jump_force); // เพิ่มแรงกระโดด
@@ -119,8 +126,8 @@ public class BallScript : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Ground")) // เช็คว่าลูกบอลแตะพื้น
         {
-           is_grounded = true;
-           Debug.Log("Ground!");
+            is_grounded = true;
+            Debug.Log("Ground!");
         }
         
         // check if dead
@@ -130,23 +137,18 @@ public class BallScript : MonoBehaviour
             Debug.Log("Checkpoint position: " + checkpointPosition);
             SetCheckPoint(checkpointPosition);
         }
+
+        if (collision.gameObject.CompareTag("coin"))
+        {
+            //         // source.clip = coin;
+            //         // source.Play();
+            coin++;
+            coinText.text = "Coin = " + coin.ToString() + "/" + coinCount.ToString();
+
+
+        }
         
     }
-
-
-    // // เช็คการชนะ
-    // private bool IsWin(){
-    //     if (GetPoint() >= 20){
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    // // Set Life Status
-    // public void SetDead(bool set){
-    //     is_dead = set;
-    //     Dead();
-    // }
 
 
     // public int GetPoint() {
@@ -159,25 +161,59 @@ public class BallScript : MonoBehaviour
 
     // }
 
-    // // check if collision with bomb
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     if(collision.gameObject.CompareTag("bomb")){
-    //         life--;
-    //         rb.AddForce(Vector3.back * explode_force );
-    //         rb.AddForce(Vector2.up * explode_force );
-    //         // Debug.Log("boomb Your father died");
-    //         // source.clip = boom;
-    //         // source.Play();
 
-    //         }
-    //     if(collision.gameObject.CompareTag("coin")){
-    //         // source.clip = coin;
-    //         // source.Play();
-    //         point_text.text = (++point).ToString();
-    //     }
-    //     life_text.text = life.ToString();
-    // }
+
+        // check if dead
+        // private void Dead(){
+        //     if (life < 1 || is_dead){
+        //         is_dead = true;
+        //         overscene.SetActive(true);
+        //     }
+        // }
+        // // เช็คการชนะ
+        // private bool IsWin(){
+        //     if (GetPoint() >= 20){
+        //         return true;
+        //     }
+        //     return false;
+        // }
+
+        // // Set Life Status
+        // public void SetDead(bool set){
+        //     is_dead = set;
+        //     Dead();
+        // }
+
+
+        // public int GetPoint() {
+        //     return point;
+        // }
+
+        // // Restart the game
+        // public void Restart(){
+        //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        // }
+
+        // // check if collision with bomb
+        // private void OnCollisionEnter(Collision collision)
+        // {
+        //     if(collision.gameObject.CompareTag("bomb")){
+        //         life--;
+        //         rb.AddForce(Vector3.back * explode_force );
+        //         rb.AddForce(Vector2.up * explode_force );
+        //         // Debug.Log("boomb Your father died");
+        //         // source.clip = boom;
+        //         // source.Play();
+
+        //         }
+        //     if(collision.gameObject.CompareTag("coin")){
+        //         // source.clip = coin;
+        //         // source.Play();
+        //         point_text.text = (++point).ToString();
+        //     }
+        //     life_text.text = life.ToString();
+        // }
 
 
 
