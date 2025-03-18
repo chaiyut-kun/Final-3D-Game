@@ -7,6 +7,7 @@ TagManager:
   - WoodenBall
   - bomb
   - coin
+  - Ground
   layers:
   - Default
   - TransparentFX
