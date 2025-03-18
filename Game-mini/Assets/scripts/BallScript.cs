@@ -17,15 +17,16 @@ public class BallScript : MonoBehaviour
 
 
     // sound asset
-    public AudioClip boom;
-    public AudioClip coin;
-    public AudioSource source;
+    // public AudioClip boom;
+    // public AudioClip coin;
+    // public AudioSource source;
 
     private int point = 0;
-    public TextMeshPro point_text;
-    public TextMeshPro life_text;
-    public GameObject overscene;
-    public GameObject winnerscene;
+    // public TextMeshPro point_text;
+    // public TextMeshPro life_text;
+    // public GameObject overscene;
+    // public GameObject winnerscene;
+
     // sound asset
 
     
@@ -35,9 +36,9 @@ public class BallScript : MonoBehaviour
     {
         
         is_dead = false;
-        life_text.text = life.ToString();
-        overscene.SetActive(false);
-        winnerscene.SetActive(false);
+        // life_text.text = life.ToString();
+        // overscene.SetActive(false);
+        // winnerscene.SetActive(false);
         
     }
 
@@ -45,14 +46,14 @@ public class BallScript : MonoBehaviour
     void Update()
     {
 
-        if (!IsWin()){
-            if (!is_dead){
-                Move();
-                Dead();
-            }
-            Dead();
-        }
-        Dead();
+        // if (!IsWin()){
+        //     if (!is_dead){
+        //         Move();
+        //         Dead();
+        //     }
+        //     Dead();
+        // }
+        // Dead();
 
     }
 
@@ -80,56 +81,56 @@ public class BallScript : MonoBehaviour
     }
 
     // check if dead
-    private void Dead(){
-        if (life < 1 || is_dead){
-            is_dead = true;
-            overscene.SetActive(true);
-        }
-    }
-    // เช็คการชนะ
-    private bool IsWin(){
-        if (GetPoint() >= 20){
-            return true;
-        }
-        return false;
-    }
+    // private void Dead(){
+    //     if (life < 1 || is_dead){
+    //         is_dead = true;
+    //         overscene.SetActive(true);
+    //     }
+    // }
+    // // เช็คการชนะ
+    // private bool IsWin(){
+    //     if (GetPoint() >= 20){
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    // Set Life Status
-    public void SetDead(bool set){
-        is_dead = set;
-        Dead();
-    }
+    // // Set Life Status
+    // public void SetDead(bool set){
+    //     is_dead = set;
+    //     Dead();
+    // }
 
     
-    public int GetPoint() {
-        return point;
-    }
+    // public int GetPoint() {
+    //     return point;
+    // }
 
-    // Restart the game
-    public void Restart(){
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    // // Restart the game
+    // public void Restart(){
+    //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-    }
+    // }
 
-    // check if collision with bomb
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("bomb")){
-            life--;
-            rb.AddForce(Vector3.back * explode_force );
-            rb.AddForce(Vector2.up * explode_force );
-            // Debug.Log("boomb Your father died");
-            source.clip = boom;
-            source.Play();
+    // // check if collision with bomb
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     if(collision.gameObject.CompareTag("bomb")){
+    //         life--;
+    //         rb.AddForce(Vector3.back * explode_force );
+    //         rb.AddForce(Vector2.up * explode_force );
+    //         // Debug.Log("boomb Your father died");
+    //         // source.clip = boom;
+    //         // source.Play();
 
-            }
-        if(collision.gameObject.CompareTag("coin")){
-            source.clip = coin;
-            source.Play();
-            point_text.text = (++point).ToString();
-        }
-        life_text.text = life.ToString();
-    }
+    //         }
+    //     if(collision.gameObject.CompareTag("coin")){
+    //         // source.clip = coin;
+    //         // source.Play();
+    //         point_text.text = (++point).ToString();
+    //     }
+    //     life_text.text = life.ToString();
+    // }
 
 
 
