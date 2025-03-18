@@ -1,36 +1,32 @@
+using System.ComponentModel.Design;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 public class BallScript : MonoBehaviour
 {
 
     public Rigidbody rb;
-
-
     private float move_force = 20f; // แรงที่ใช้ในการเดิน จะทดลองนำไปใช้คู่กับ Addforce ใน script นี้
-    private int life = 10;
-    // public float explode_force = 1000f;
-    private bool is_dead;
     public Transform Camera;
     public float jump_force = 100f; // กำหนดแรงกระโดด
     private bool is_grounded = true; // ตรวจสอบว่าลูกบอลอยู่บนพื้นหรือไม่
     private Vector3 checkpoint;
+    private bool win = false;
+    public GameObject Winner;
+    public AudioSource source;
+    public AudioClip oof;
+    public AudioClip exp;
+    public AudioClip walk;
+    public AudioClip jump;
 
 
-    // sound asset
-    // public AudioClip boom;
-    // public AudioClip coin;
-    // public AudioSource source;
-
-    private int point = 0;
-    // public TextMeshPro point_text;
-    // public TextMeshPro life_text;
-    // public GameObject overscene;
-    // public GameObject winnerscene;
+    private int coin = 0;
 
     // sound asset
 
@@ -40,10 +36,6 @@ public class BallScript : MonoBehaviour
     void Start()
     {
         
-        is_dead = false;
-        // life_text.text = life.ToString();
-        // overscene.SetActive(false);
-        // winnerscene.SetActive(false);
 
         
     }
@@ -52,17 +44,9 @@ public class BallScript : MonoBehaviour
     void Update()
     {
 
-        // if (!IsWin()){
-        //     if (!is_dead){
-        //         Move();
-        //         Dead();
-        //     }
-        //     Dead();
-        // }
-        // Dead();
-
         Move();
         GetComponent<Rigidbody>().AddForce(Physics.gravity, ForceMode.Acceleration);
+        IsWin();
     }
 
     private void Move(){
@@ -77,7 +61,6 @@ public class BallScript : MonoBehaviour
 
         Vector3 movement = (forward * move_vertical + right * move_horizontal).normalized * move_force;
         rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
-
         rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
 
         // move left
@@ -99,7 +82,8 @@ public class BallScript : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jump_force); // เพิ่มแรงกระโดด
             is_grounded = false; // ตั้งค่าให้รู้ว่าลูกบอลอยู่กลางอากาศ
-
+            source.clip = jump;
+            source.Play();
             Debug.Log("Jump!");
         }
     }
@@ -116,6 +100,9 @@ public class BallScript : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Lava")){
             rb.position = GetCheckPoint();
+            source.clip = oof;
+            source.Play();
+            
         }
         if (collision.gameObject.CompareTag("Ground")) // เช็คว่าลูกบอลแตะพื้น
         {
@@ -130,55 +117,20 @@ public class BallScript : MonoBehaviour
             Debug.Log("Checkpoint position: " + checkpointPosition);
             SetCheckPoint(checkpointPosition);
         }
+        if(collision.gameObject.CompareTag("Win")){
+            win = true;
+        }
+        
         
     }
 
 
     // // เช็คการชนะ
-    // private bool IsWin(){
-    //     if (GetPoint() >= 20){
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    // // Set Life Status
-    // public void SetDead(bool set){
-    //     is_dead = set;
-    //     Dead();
-    // }
-
-
-    // public int GetPoint() {
-    //     return point;
-    // }
-
-    // // Restart the game
-    // public void Restart(){
-    //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-    // }
-
-    // // check if collision with bomb
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     if(collision.gameObject.CompareTag("bomb")){
-    //         life--;
-    //         rb.AddForce(Vector3.back * explode_force );
-    //         rb.AddForce(Vector2.up * explode_force );
-    //         // Debug.Log("boomb Your father died");
-    //         // source.clip = boom;
-    //         // source.Play();
-
-    //         }
-    //     if(collision.gameObject.CompareTag("coin")){
-    //         // source.clip = coin;
-    //         // source.Play();
-    //         point_text.text = (++point).ToString();
-    //     }
-    //     life_text.text = life.ToString();
-    // }
-
-
+    private void IsWin(){
+        if (win){
+            Winner.SetActive(true);
+        }
+        
+    }
 
 }
