@@ -7,6 +7,7 @@ using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BallScript : MonoBehaviour
 {
@@ -27,17 +28,18 @@ public class BallScript : MonoBehaviour
 
 
     private int coin = 0;
+    private int coinCount;
+    public Text coinText;
 
     // sound asset
 
-    
-    
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
-
-        
+        coinCount = GameObject.FindGameObjectsWithTag("coin").Length;
+        coinText.text = "Coin = " + coin.ToString() + "/" + coinCount.ToString();
     }
 
     // Update is called once per frame
@@ -117,18 +119,24 @@ public class BallScript : MonoBehaviour
             Debug.Log("Checkpoint position: " + checkpointPosition);
             SetCheckPoint(checkpointPosition);
         }
-        if(collision.gameObject.CompareTag("Win")){
+        if(collision.gameObject.CompareTag("Win") && coin == 100){
             win = true;
         }
-        
-        
+
+        if (collision.gameObject.CompareTag("coin"))
+        {
+            coin++;
+            coinText.text = "Coin = " + coin.ToString() + "/" + coinCount.ToString();
+        }
+
     }
 
 
     // // เช็คการชนะ
     private void IsWin(){
-        if (win){
+        if (win && coin == 100){
             Winner.SetActive(true);
+            Debug.Log("You win");
         }
         
     }
