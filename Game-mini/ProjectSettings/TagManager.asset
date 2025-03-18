@@ -10,6 +10,7 @@ TagManager:
   - Ground
   - CheckPoint
   - Lava
+  - Win
   layers:
   - Default
   - TransparentFX
