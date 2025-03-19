@@ -28,7 +28,7 @@ public class BallScript : MonoBehaviour
     public AudioClip jump;
 
 
-    private int coin = 90;
+    private int coin = 0;
     private int coinCount;
     public Text coinText;
 
