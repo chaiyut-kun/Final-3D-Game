@@ -136,6 +136,8 @@ public class BallScript : MonoBehaviour
         {
             coin++;
             coinText.text = "Coin = " + coin.ToString() + "/" + coinCount.ToString();
+            source.clip = exp;
+            source.Play();
         }
 
     }
